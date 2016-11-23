@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MonerMoney.iml" filepath="$PROJECT_DIR$/MonerMoney.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/cs284IntroSE.iml" filepath="$PROJECT_DIR$/cs284IntroSE.iml" />
     </modules>
   </component>

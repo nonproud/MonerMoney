@@ -90,7 +90,8 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
         for( ; res.moveToNext() ; ) {
             if(res.getString(6).equalsIgnoreCase("0")) {
                 String money = res.getString(1);
-                buffer.append(res.getString(2));
+                buffer.append(res.getString(2)
+                );
                 buffer.append("/");
                 buffer.append(res.getString(3));
                 buffer.append("/");
