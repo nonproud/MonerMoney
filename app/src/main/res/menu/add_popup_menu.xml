@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools = "http://schemas.android.com/tools"
+    tools:context="com.andoidsrc.popupmenu.MainActivity">
+    <item
+        android:id="@+id/add_income_popup_menu"
+        android:showAsAction="ifRoom|withText"
+        android:title="เพิ่มรายรับ"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/add_outcome_popup_menu"
+        android:showAsAction="ifRoom|withText"
+        android:title="เพิ่มรายจ่าย"
+        android:visible="true"
+        />
+</menu>
