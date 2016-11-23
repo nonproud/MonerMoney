@@ -97,7 +97,7 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
                 buffer.append(res.getString(4));
                 String date = buffer.toString();
                 String note = res.getString(5);
-                incomes.add(money+"\t"+date+"\t"+note);
+                incomes.add(date+"\t"+money+"\t"+note);
             }
         }
         Collections.reverse(incomes);
@@ -129,13 +129,13 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
         return outcomes;
     }
 
-    public ArrayList<String> getAllOutcomeData() throws MonerMoneyDBException {
+    public ArrayList<String> getAllOutcomeData() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("select * from " + TABLE_NAME, null);
-        if(res.getCount() == 0) {
-            throw new MonerMoneyDBException("Nothing Found");
-        }
         ArrayList<String> outcomes = new ArrayList<String>();
+        if(res.getCount() == 0) {
+            return outcomes;
+        }
         StringBuffer buffer = new StringBuffer();
         for( ; res.moveToNext() ; ) {
             if(res.getString(6).equalsIgnoreCase("1")) {
@@ -147,7 +147,7 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
                 buffer.append(res.getString(4));
                 String date = buffer.toString();
                 String note = res.getString(5);
-                outcomes.add(money+"\t"+date+"\t"+note);
+                outcomes.add(date+"\t"+money+"\t"+note);
             }
         }
         Collections.reverse(outcomes);
