@@ -5,14 +5,14 @@ package comsitejustdoitwhistle.google.sites.monermoney;
  */
 
 public class Outcome {
-    int money;
+    double money;
     String date, note;
-    public Outcome(int money, String date, String note) {
+    public Outcome(double money, String date, String note) {
         this.money = money;
         this.date = date;
         this.note = note;
     }
-    public int getMoney() { return this.money; }
+    public double getMoney() { return this.money; }
     public String getDate() { return this.date; }
     public String getNote() { return this.note; }
 }

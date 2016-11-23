@@ -21,7 +21,7 @@ public class AddIncome extends AppCompatActivity {
 
     private final int TYPE_INCOME = 0;
     private Button mCalendarPicker;
-    private int amount;
+    private double amount;
     private Editable comment;
     private int date, month, years;
     private static final int DIALOG_ID = 0;
@@ -70,7 +70,7 @@ public class AddIncome extends AppCompatActivity {
                 check = true;
                 comment = mNoteTextView.getText();
                 try {
-                    amount = Integer.parseInt(String.valueOf(mAmountIncome.getText()));
+                    amount = Double.parseDouble(String.valueOf(mAmountIncome.getText()));
                 } catch (NumberFormatException e) {
                     check = false;
                     alertDialog.setTitle("ผิดพลาด");

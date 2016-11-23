@@ -23,7 +23,7 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
     public static final String COL_5 = "YEAR";
     public static final String COL_6 = "NOTE";
     public static final String COL_7 = "STATUS";
-    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_2 + " INTEGER, " +
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_2 + " REAL, " +
             COL_3 + " INTEGER, " + COL_4 + " INTEGER, " + COL_5 + " INTEGER, " + COL_6 + " TEXT, " + COL_7 + " INTEGER)";
 
     public MonerMoneyDB(Context context) {
@@ -37,7 +37,7 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
-    public void insertData(int money, int day, int month, int year, String note, int type) throws MonerMoneyDBException {
+    public void insertData(double money, int day, int month, int year, String note, int type) throws MonerMoneyDBException {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -72,7 +72,7 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
                 buffer.append(res.getString(4));
                 String date = buffer.toString();
                 String note = res.getString(5);
-                incomes.add(new Income(Integer.parseInt(money), date, note));
+                incomes.add(new Income(Double.parseDouble(money), date, note));
             }
         }
         Collections.reverse(incomes);
@@ -82,10 +82,10 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
     public ArrayList<String> getAllIncomeData(){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("select * from " + TABLE_NAME, null);
-        if(res.getCount() == 0) {
-            return null;
-        }
         ArrayList<String> incomes = new ArrayList<String>();
+        if(res.getCount() == 0) {
+            return incomes;
+        }
         StringBuffer buffer = new StringBuffer();
         for( ; res.moveToNext() ; ) {
             if(res.getString(6).equalsIgnoreCase("0")) {
@@ -97,14 +97,14 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
                 buffer.append(res.getString(4));
                 String date = buffer.toString();
                 String note = res.getString(5);
-                incomes.add(money+"    "+date+"   "+note);
+                incomes.add(money+"\t"+date+"\t"+note);
             }
         }
         Collections.reverse(incomes);
         return incomes;
     }
 
-    public ArrayList<Outcome> getAllOutcomeData() throws MonerMoneyDBException {
+    public ArrayList<Outcome> getAllOutcomeData(int i) throws MonerMoneyDBException {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("select * from " + TABLE_NAME, null);
         if(res.getCount() == 0) {
@@ -122,32 +122,55 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
                 buffer.append(res.getString(4));
                 String date = buffer.toString();
                 String note = res.getString(5);
-                outcomes.add(new Outcome(Integer.parseInt(money), date, note));
+                outcomes.add(new Outcome(Double.parseDouble(money), date, note));
             }
         }
         Collections.reverse(outcomes);
         return outcomes;
     }
 
+    public ArrayList<String> getAllOutcomeData() throws MonerMoneyDBException {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME, null);
+        if(res.getCount() == 0) {
+            throw new MonerMoneyDBException("Nothing Found");
+        }
+        ArrayList<String> outcomes = new ArrayList<String>();
+        StringBuffer buffer = new StringBuffer();
+        for( ; res.moveToNext() ; ) {
+            if(res.getString(6).equalsIgnoreCase("1")) {
+                String money = res.getString(1);
+                buffer.append(res.getString(2));
+                buffer.append("/");
+                buffer.append(res.getString(3));
+                buffer.append("/");
+                buffer.append(res.getString(4));
+                String date = buffer.toString();
+                String note = res.getString(5);
+                outcomes.add(money+"\t"+date+"\t"+note);
+            }
+        }
+        Collections.reverse(outcomes);
+        return outcomes;
+    }
 
-
-    public int getIncomeSum() throws MonerMoneyDBException {
-        int sum = 0;
+    public double getIncomeSum() throws MonerMoneyDBException {
+        double sum = 0;
         ArrayList<Income> incomes = getAllIncomeData(1);
         for(int i = 0 ; i < incomes.size() ; i++)
             sum += incomes.get(i).getMoney();
         return sum;
     }
 
-    public int getOutcomeSum() throws MonerMoneyDBException {
-            int sum = 0;
-            ArrayList<Outcome> outcomes = null;
-            outcomes = getAllOutcomeData();
-            for(int i = 0 ; i < outcomes.size() ; i++)
-                sum += outcomes.get(i).getMoney();
-            return sum;
+    public double getOutcomeSum() throws MonerMoneyDBException {
+        double sum = 0;
+        ArrayList<Outcome> outcomes = getAllOutcomeData(1);
+        for(int i = 0 ; i < outcomes.size() ; i++)
+            sum += outcomes.get(i).getMoney();
+        return sum;
     }
-
-//
+    public double getBalanced() throws MonerMoneyDBException {
+        return getIncomeSum() - getOutcomeSum();
+    }
 
 }

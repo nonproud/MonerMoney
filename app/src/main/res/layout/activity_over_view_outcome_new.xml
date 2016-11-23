@@ -25,11 +25,6 @@
         android:layout_gravity=""
 
         >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Commig Soon :)"
-            android:textSize="50dp"/>
 
     </LinearLayout>
 

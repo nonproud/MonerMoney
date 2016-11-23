@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.HeaderViewListAdapter;
@@ -29,17 +30,14 @@ public class OverViewIncome_new extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_over_view_income_new);
         dataBase = new MonerMoneyDB(OverViewIncome_new.this);
-        list= new ArrayList<>();
+        list= new ArrayList<String>();
         //list.add("ไม่พบข้อมูลรายรับ");
         bindWidget();
         list = dataBase.getAllIncomeData();
-
-        if(list == null){
+//        Toast.makeText(this, list.size(), Toast.LENGTH_LONG).show();
+        if(list.size() == 0){
             list.add("ไม่พบขอมูลรายรับ");
         }
-
-        String[] clubList = {"Arsenal", "Chelsea", "Everton",
-                "Liverpool", "Man City", "Man Utd", "Spurs" };
 
         mListView.setAdapter(new ArrayAdapter<String>( this,
         android.R.layout.simple_list_item_1, list));
