@@ -20,6 +20,8 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.w3c.dom.Text;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -35,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private Button mNewBtn;
     private Button mOverViewIncomebtn;
     private Button mOverViewOutComebtn;
+    private TextView mSummary;
+    private MonerMoneyDB database;
+    private TextView mSummaryOutcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         bindWidget();
         setPopupMenu();
         setOnClickListener();
+        updateBalance();
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -50,25 +56,26 @@ public class MainActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    private void updateBalance() {
+        database = new MonerMoneyDB(MainActivity.this);
+        try {
+            mSummary.setText(String.format("%.2f",database.getBalanced()));
+        } catch (MonerMoneyDBException e) {
+            mSummary.setText(""+0);
+        }
+
+        try{
+            mSummaryOutcome.setText(String.format("รายจ่ายรวม: %.2f",database.getOutcomeSum()));
+        }catch (MonerMoneyDBException e){
+            mSummaryOutcome.setText("รายจ่ายรวม: 0");
+        }
+    }
+
     private void setOnClickListener() {
         mFloatbtnAdd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupMenu.show();
-            }
-        });
-
-        mOverViewIncomebtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        mOverViewOutComebtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
 
@@ -113,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
         mFloatbtnAdd = (FloatingActionButton) findViewById(R.id.floatbtn_add);
         mOverViewIncomebtn = (Button) findViewById(R.id.overview_income_btn);
         mOverViewOutComebtn = (Button) findViewById(R.id.overview_outcome_btn);
+        mSummary = (TextView) findViewById(R.id.tvSummarylabel);
+        mSummaryOutcome = (TextView) findViewById(R.id.tvSummary1);
     }
 
     /**
@@ -134,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
+        updateBalance();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();

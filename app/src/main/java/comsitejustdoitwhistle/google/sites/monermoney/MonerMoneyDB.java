@@ -78,6 +78,7 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
         Collections.reverse(incomes);
         return incomes;
     }
+
     //New method return ArrayList of String
     public ArrayList<String> getAllIncomeData(){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -86,8 +87,9 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
         if(res.getCount() == 0) {
             return incomes;
         }
-        StringBuffer buffer = new StringBuffer();
+
         for( ; res.moveToNext() ; ) {
+            StringBuffer buffer = new StringBuffer();
             if(res.getString(6).equalsIgnoreCase("0")) {
                 String money = res.getString(1);
                 buffer.append(res.getString(2)
@@ -98,7 +100,7 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
                 buffer.append(res.getString(4));
                 String date = buffer.toString();
                 String note = res.getString(5);
-                incomes.add(date+"\t"+money+"\t"+note);
+                incomes.add(date+"\n"+String.format("%.2f",Double.parseDouble(money))+"\n"+note);
             }
         }
         Collections.reverse(incomes);
@@ -137,8 +139,8 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
         if(res.getCount() == 0) {
             return outcomes;
         }
-        StringBuffer buffer = new StringBuffer();
         for( ; res.moveToNext() ; ) {
+            StringBuffer buffer = new StringBuffer();
             if(res.getString(6).equalsIgnoreCase("1")) {
                 String money = res.getString(1);
                 buffer.append(res.getString(2));
@@ -148,7 +150,7 @@ public class MonerMoneyDB extends SQLiteOpenHelper {
                 buffer.append(res.getString(4));
                 String date = buffer.toString();
                 String note = res.getString(5);
-                outcomes.add(date+"\t"+money+"\t"+note);
+                outcomes.add(date+"\n"+String.format("%.2f",Double.parseDouble(money))+"\n"+note);
             }
         }
         Collections.reverse(outcomes);
